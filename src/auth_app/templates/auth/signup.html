@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    Login
+    Sign Up
 {% endblock title %}
 
 {% block content %}
@@ -11,20 +11,20 @@
             <div class="col-3" >
             </div>
             <div class="col-6" >
-                <h2>Login</h2>
+                <h2>Register</h2>
                 <br>
                 <div>
                     <form action="" method="POST" class="p-3 border border-2" >
                         {% csrf_token %}
                         {{form|crispy}}
                         <button type="submit" class="btn btn-primary mt-3">
-                            Login
+                            Signup
                         </button>
                     </form>
                 </div>
                 <br>
-                <p>Are you new here?</p>
-                <p><a href="{% url 'auth:register' %}">Create an account</a> as a hitman</p>
+                <p>Do you have an account already?</p>
+                <a href="{% url 'auth:login' %}">Login</a>
             </div>
             <div class="col-3" >
             </div>

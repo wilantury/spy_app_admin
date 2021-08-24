@@ -2,11 +2,19 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 # Forms
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
 
+
+def signup_view(request):
+    signup_form = SignupForm()
+
+    context = {
+        "form":signup_form
+    }
+    return render(request, 'auth/signup.html', context)
 
 def login_view(request):
-    
+
     login_form = LoginForm()
 
     if request.method == 'POST':
