@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 # utils
 from .utils import get_context
-from .constants import HITMAN, MANAGER
+from .constants import HITMAN, MANAGER, BOSS
 
 @login_required
 def hits_view(request):
     spy = request.user
     if spy.is_staff and spy.is_superuser: # Boss
-        print("Superuser view")
+        context = get_context(spy, BOSS)
+        return render(request, 'hits/boss_hits_view.html', context)
     elif spy.is_staff and not spy.is_superuser: # manager
         context = get_context(spy, MANAGER)          
         return render(request, 'hits/manager_hits.html', context)
