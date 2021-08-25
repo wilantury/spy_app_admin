@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 
 class OverrideUserManager(UserManager):
 
-    def create_user(self, email, username=None, password=None, **extra_fields):
+    def create_user(self, email, username="", password=None, **extra_fields):
         """Create and save a user with the given username, email, and password."""
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
@@ -16,7 +16,8 @@ class OverrideUserManager(UserManager):
         # manager method can be used in migrations. This is fine because
         # managers are by definition working on the real model.
         # username = GlobalUserModel.normalize_username(username)
-        user = self.model(username=email, email=email, **extra_fields)
+        username = email.split("@")[0]
+        user = self.model(username=username, email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
         return user
@@ -34,7 +35,7 @@ class OverrideUserManager(UserManager):
         return user
 
 class Spy(AbstractUser):
-    username = models.CharField(max_length=150, blank=True)
+    username = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
 
     objects = OverrideUserManager()
