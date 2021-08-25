@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Manager's Hits
+{% endblock title %}
+
+{% block content %}
+    {% if hits %}
+        <br>
+        <h3>Hits assigned you</h3>
+        <ul>
+            {% for hit in hits %}
+                <li> <a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <br>
+        <h3>Not Hits have been assigned you yet</h3>
+    {% endif %}
+{% endblock content %}
+
