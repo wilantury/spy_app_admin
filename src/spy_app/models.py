@@ -41,7 +41,7 @@ class TeamManager(models.Model):
 """Team members"""
 class TeamMembers(models.Model):
     hitman = models.ForeignKey(Spy, on_delete=models.CASCADE)
-    team = models.ForeignKey(TeamManager, on_delete=models.CASCADE)
+    team = models.ForeignKey(TeamManager, on_delete=models.CASCADE, related_name='manager_team')
 
     def __str__(self):
         return f'manager: {self.team.manager} hitman:{self.hitman}'
