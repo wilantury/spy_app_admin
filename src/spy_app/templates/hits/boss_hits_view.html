@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Boss Hits List
+{% endblock title %}
+
+{% block content %}
+    {% if hits %}
+        {% for manager in hits %}
+
+            <br>
+            <h4>Manager: {{manager.manager_hits.manager.email}}</h3>
+            {% if manager.manager_hits.hits %}
+                <ul>
+                    {% for hit in manager.manager_hits.hits %}
+                        <li> <a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <li>Not Hits have been assigned to {{manager.manager_hits.manager.email}} yet.</li>
+            {% endif %}
+            <br>
+            {% if manager.manager_hits.team %}
+                <h4>Team ID: {{manager.manager_hits.team.id}}</h4>
+                {% if manager.manager_hits.team_members %}
+                    {% for member in manager.manager_hits.team_members %}
+                        <h5>{{member.email}}</h5>
+                        <ul>
+                            {% for hit in member.hits %}
+                                <li><a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                <li>Not Team assigned you yet</li>        
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <br>
+        <h5>Not Hits have been assigned you yet</h5>
+    {% endif %}
+{% endblock content %}
+

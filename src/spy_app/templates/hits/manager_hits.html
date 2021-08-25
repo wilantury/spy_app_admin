@@ -13,6 +13,24 @@
                 <li> <a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
             {% endfor %}
         </ul>
+        <br>
+        {% if team %}
+            <h4>Team ID: {{team.id}}</h4>
+            {% if members_team %}
+                {% for member in members_team %}
+                    <h5>{{member.email}}</h5>
+                    <ul>
+                        {% for hit in member.hits %}
+                            <li><a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% endif %}
+
+        {% else %}
+            <h4>Not Team assigned you yet</h4>        
+        {% endif %}
+        
     {% else %}
         <br>
         <h3>Not Hits have been assigned you yet</h3>
