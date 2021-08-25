@@ -126,6 +126,9 @@ USE_TZ = True
 # Customized User model
 AUTH_USER_MODEL = 'auth_app.Spy'
 
+# AUTH
+LOGIN_URL = '/'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

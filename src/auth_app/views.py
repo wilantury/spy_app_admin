@@ -1,11 +1,16 @@
 # Django
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.db.utils import IntegrityError
 # Forms
 from .forms import LoginForm, SignupForm
 
 Spy = get_user_model()
+
+def logout_view(request):
+    logout(request)
+    return redirect('auth:login')
+
 
 def signup_view(request):
     signup_form = SignupForm()
@@ -57,6 +62,9 @@ def login_view(request):
                     print("Manager")
                 elif not spy.is_staff and not spy.is_superuser: # hitman
                     print("Hitman")
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
+                return redirect('spy_app:hits')
             else:
                 context['error_msn'] = 'Ups... something went wrong, check your e-mail address and password.'
         else:
