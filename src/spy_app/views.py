@@ -2,14 +2,50 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import get_user_model
 # utils
-from .utils import get_context
+from .utils import get_context, get_hitmans
 from .constants import FAILED, HITMAN, MANAGER, BOSS, COMPLETED
 # Models
 from .models import Hit, HitStatus
 # Forms
-from .forms import ReassignHitForm
+from .forms import ReassignHitForm, HitForm
 
 Spy = get_user_model()
+
+@login_required
+@permission_required('spy_app.can_create_hit')
+def hit_create(request):
+    spy = request.user
+    rol = None
+    hit_form = HitForm(request.POST or None)
+
+    if request.method == "POST":
+         if hit_form.is_valid():
+            data_form = hit_form.cleaned_data
+            target_name = data_form.get('target_name')
+            target_location = data_form.get('target_location')
+            description = data_form.get('description')
+            hitman_assigned = data_form.get('hitman_assigned')
+            status = HitStatus.objects.filter(name="On progress").first()
+            assigment_creator = Spy.objects.filter(pk=spy.id).first()
+            hit = Hit(target_name=target_name, target_location=target_location,
+                    description=description, hitman_assigned=hitman_assigned,
+                    status=status, assigment_creator=assigment_creator)
+            hit.save()
+
+    if spy.is_superuser:
+        rol = BOSS
+        hit_form.fields['hitman_assigned'].queryset = get_hitmans(spy, rol)
+    elif spy.is_staff:
+        rol = MANAGER
+        hit_form.fields['hitman_assigned'].queryset = get_hitmans(spy, rol)
+    context = {
+        'hit_form':hit_form
+    }
+
+    return render(request, 'hits/create_hit.html', context)
+
+
+    
 
 @login_required
 def hits_view(request):

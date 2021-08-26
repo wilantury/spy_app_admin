@@ -25,6 +25,9 @@ class Hit(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        permissions =(('can_create_hit','Is able to create a Hit',),)
+
     def __str__(self) -> str:
         return f'status:{self.status} hitman:{self.hitman_assigned}'
 

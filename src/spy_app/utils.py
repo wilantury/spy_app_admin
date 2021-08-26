@@ -1,9 +1,22 @@
 #django
 from django.contrib.auth import get_user_model
+from django.db.models.query import QuerySet
+# Models
 from .models import Hit, TeamManager, TeamMembers
-from .constants import MANAGER, HITMAN
+from .constants import MANAGER, HITMAN, BOSS
 
 Spy = get_user_model()
+
+def get_hitmans(spy, rol):
+        if rol == MANAGER:
+            team = TeamManager.objects.filter(manager=spy.id).first()
+            if team:
+                members = TeamMembers.objects.filter(team=team.id).filter().values_list("hitman")
+                query_members = Spy.objects.filter(id__in=members).filter(is_active=True)
+                return query_members if members else None
+            return None
+        elif rol == BOSS:
+            return Spy.objects.filter(is_superuser=False).filter(is_active=True)
 
 def _get_members_hits(team_members):
     list_hits = []
