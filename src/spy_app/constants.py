@@ -1,3 +1,5 @@
 HITMAN ="HITMAN"
 MANAGER = "MANAGER"
 BOSS = "BOSS"
+FAILED = "Failed"
+COMPLETED = "Completed"
