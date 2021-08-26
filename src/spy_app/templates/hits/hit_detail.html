@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Hit {{hit.pk}}
+{% endblock title %}
+
+{% block content %}
+    {% include 'includes/reassign_modal.html' %}
+    {% if hit %}
+        <ul>
+            
+            <li><strong>Status:</strong> {{hit.status}} 
+                {% if  assigned_hit %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" id="completed" name="hit_status" value="1">
+                        <button type="submit"  class="btn btn-outline btn-success">mark as completed</button> 
+                    </form>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" id="completed" name="hit_status" value="0">
+                        <button type="submit"  class="btn btn-outline btn-danger">mark as failed</button> 
+                    </form>
+                    
+                {% endif %} 
+            </li>
+            <li><strong>Target name:</strong> {{hit.target_name}}</li>
+            <li><strong>Target location:</strong> {{hit.target_location}}</li>
+            <li><strong>Description:</strong> {{hit.description}}</li>
+
+            <li><strong>Hitman assigned:</strong> {{hit.hitman_assigned}}
+                {% if spy_rol is not "HITMAN" and hit.status.name == "On progress"%}
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reassignHitmanModal">
+                            Re-assign Hit
+                        </button>
+                {% endif %}
+            </li>
+            
+            <li><strong>Hit creator:</strong> {{hit.assigment_creator}}</li>
+            <li><strong>Created:</strong> {{hit.created}}</li>
+        </ul>  
+    {% else %}
+        <div class="alert alert-danger" role="alert">
+            <h4>You don't have access to this Hit ID</h4>
+        </div>  
+    {% endif %}
+{% endblock content %}
+

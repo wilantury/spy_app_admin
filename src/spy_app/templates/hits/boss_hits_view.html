@@ -13,7 +13,7 @@
             {% if manager.manager_hits.hits %}
                 <ul>
                     {% for hit in manager.manager_hits.hits %}
-                        <li> <a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+                        <li> <a href="{% url 'spy_app:hit_detail' hit.pk %}"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
                     {% endfor %}
                 </ul>
             {% else %}
@@ -27,7 +27,7 @@
                         <h5>{{member.email}}</h5>
                         <ul>
                             {% for hit in member.hits %}
-                                <li><a href="#"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+                                <li><a href="{% url 'spy_app:hit_detail' hit.pk %}"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
                             {% endfor %}
                         </ul>
                     {% endfor %}
