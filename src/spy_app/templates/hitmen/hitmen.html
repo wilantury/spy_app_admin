@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Hitmen List
+{% endblock title %}
+
+{% block content %}
+    {% if hitmen %}
+        <br>
+        <h3>Hitmen List</h3>
+        <ul>
+            {% for hitman in hitmen %}
+                <li> <a href="{% url 'spy_app:hit_detail' hitman.pk %}"> {{hitman.id}} - {{hitman.email}}  status: {{hitman.is_active}}  username: {{hitman.username}} </a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <br>
+        <h3>No hitmen in your team</h3>
+    {% endif %}
+{% endblock content %}
+

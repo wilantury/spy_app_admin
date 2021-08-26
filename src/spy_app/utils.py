@@ -7,16 +7,29 @@ from .constants import MANAGER, HITMAN, BOSS
 
 Spy = get_user_model()
 
-def get_hitmans(spy, rol):
+def get_role(spy):
+    if spy.is_superuser:
+        return BOSS
+    elif not spy.is_superuser and spy.is_staff:
+        return MANAGER
+    return HITMAN
+
+def get_hitmans(spy, rol, inactive=False):
         if rol == MANAGER:
             team = TeamManager.objects.filter(manager=spy.id).first()
             if team:
                 members = TeamMembers.objects.filter(team=team.id).filter().values_list("hitman")
-                query_members = Spy.objects.filter(id__in=members).filter(is_active=True)
+                if not inactive:
+                    query_members = Spy.objects.filter(id__in=members).filter(is_active=True)
+                else:
+                    query_members = Spy.objects.filter(id__in=members)
                 return query_members if members else None
             return None
         elif rol == BOSS:
-            return Spy.objects.filter(is_superuser=False).filter(is_active=True)
+            if not inactive:
+                return Spy.objects.filter(is_superuser=False).filter(is_active=True)
+            return Spy.objects.filter(is_superuser=False)
+
 
 def _get_members_hits(team_members):
     list_hits = []

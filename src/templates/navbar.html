@@ -13,6 +13,9 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'spy_app:hit_create' %}">Create Hit</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'spy_app:hitmen_list' %}">Hitmen</a>
+          </li>
         {% endif %}
       </ul>
       {% if request.user.is_authenticated %}

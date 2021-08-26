@@ -37,8 +37,11 @@ class OverrideUserManager(UserManager):
 class Spy(AbstractUser):
     username = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
-
+    description = models.TextField(null=True, blank=True)
     objects = OverrideUserManager()
 
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'email'
+
+    class Meta:
+        permissions =(('can_see_hitmen',"Is able to see the hitman's list",),)
