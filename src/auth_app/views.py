@@ -40,6 +40,9 @@ def signup_view(request):
 
 def login_view(request):
 
+    if request.user.is_authenticated:
+        return redirect('spy_app:hits')    
+    
     login_form = LoginForm()
 
     context = {

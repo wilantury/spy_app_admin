@@ -18,16 +18,6 @@ class HitForm(forms.Form):
     target_location = forms.CharField(max_length=150)
     description = forms.CharField(widget=Textarea())
     hitman_assigned = forms.ModelChoiceField(queryset=Spy.objects.filter(is_superuser=False))
-    
-    # def _get_hitmans(self):
-    #     if self._rol == MANAGER:
-    #         team = TeamManager.objects.filter(manager=self._spy.id).first()
-    #         if team:
-    #             members = TeamMembers.objects.filter(team=team.id)
-    #             return members if members else []
-    #         return []
-    #     elif self._rol == BOSS:
-    #         return Spy.objects.filter(is_superuser=False)
 
 
 
