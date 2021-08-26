@@ -5,11 +5,52 @@ from django.contrib.auth import get_user_model
 from .utils import get_context, get_hitmans, get_role
 from .constants import FAILED, HITMAN, MANAGER, BOSS, COMPLETED
 # Models
-from .models import Hit, HitStatus
+from .models import Hit, HitStatus, TeamManager, TeamMembers
 # Forms
 from .forms import ReassignHitForm, HitForm
 
 Spy = get_user_model()
+
+@login_required
+@permission_required('auth_app.can_see_hitmen')
+def hitman_detail(request, pk):
+    spy = request.user
+    context = {
+        'hitman':None,
+        'members': None
+    }
+    rol = get_role(spy)
+
+    hitman = Spy.objects.filter(pk=pk).first()
+    if hitman:
+        if rol==MANAGER:
+            team = TeamManager.objects.filter(manager=spy.id).first()
+            if team:
+                member = TeamMembers.objects.filter(team=team.id).filter(hitman=hitman.id).first()
+                if member:
+                    context['hitman'] = hitman
+
+        elif rol==BOSS:
+            if get_role(hitman) == MANAGER:
+                members = get_hitmans(hitman,MANAGER, inactive=True)
+                context['hitman'] = hitman
+                context['members'] = members
+            else:
+                context['hitman'] = hitman
+
+
+    
+
+    if request.method == 'POST':
+        try:
+            data = request.POST['inactive_hitman']
+            if data == '1':
+                hitman.is_active = False
+                hitman.save()
+        except:
+            next
+
+    return render(request, 'hitmen/hitman_detail.html', context)
 
 @login_required
 @permission_required('auth_app.can_see_hitmen')

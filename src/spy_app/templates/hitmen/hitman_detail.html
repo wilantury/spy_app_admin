@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Hitmam Detail
+{% endblock title %}
+
+{% block content %}
+        <br>
+        <h3>Hitmam detail</h3>
+        <ul>
+            <li>Name: {{hitman.first_name}}</li>
+            <li>email: {{hitman.email}}</li>
+            <li>Status:
+                {% if hitman.is_active %}
+                    Activo
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" id="inactive" name="inactive_hitman" value="1">
+                        <button type="submit"  class="btn btn-outline btn-success">Inactive hitman</button> 
+                    </form>
+                {% else %}
+                    Inactivo
+                {% endif %} 
+            </li>
+            <li>Description: {{hitman.description}}</li>
+            {% if members %}
+                <li>Members
+                    <ul>
+                        {% for member in members %}
+                            <li>{{member.email}}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+{% endblock content %}
+

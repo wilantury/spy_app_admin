@@ -10,7 +10,7 @@
         <h3>Hitmen List</h3>
         <ul>
             {% for hitman in hitmen %}
-                <li> <a href="{% url 'spy_app:hit_detail' hitman.pk %}"> {{hitman.id}} - {{hitman.email}}  status: {{hitman.is_active}}  username: {{hitman.username}} </a></li>
+                <li> <a href="{% url 'spy_app:hitman_detail' hitman.pk %}"> {{hitman.id}} - {{hitman.email}}  status: {{hitman.is_active}}  username: {{hitman.username}} </a></li>
             {% endfor %}
         </ul>
     {% else %}
