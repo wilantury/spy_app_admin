@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import get_user_model
 # utils
-from .utils import get_context, get_hitmans
+from .utils import get_context, get_hitmans, get_role
 from .constants import FAILED, HITMAN, MANAGER, BOSS, COMPLETED
 # Models
 from .models import Hit, HitStatus
@@ -10,6 +10,22 @@ from .models import Hit, HitStatus
 from .forms import ReassignHitForm, HitForm
 
 Spy = get_user_model()
+
+@login_required
+def hitmen_list(request):
+    spy = request.user
+    rol = get_role(spy)
+    context = {
+        'hitmen':None
+    }
+    hitmen = None
+    if rol == MANAGER:
+        hitmen = get_hitmans(spy, rol, inactive=True)
+    elif rol == BOSS:
+        hitmen = get_hitmans(spy, rol, inactive=False)
+    context['hitmen'] = hitmen
+    
+    return render(request, 'hitmen/hitmen.html', context)
 
 @login_required
 @permission_required('spy_app.can_create_hit')
