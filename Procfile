@@ -1,0 +1,1 @@
+web: gunicorn --chdir src spy_dashboard_prj.wsgi
