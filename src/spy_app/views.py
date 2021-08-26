@@ -12,6 +12,7 @@ from .forms import ReassignHitForm, HitForm
 Spy = get_user_model()
 
 @login_required
+@permission_required('auth_app.can_see_hitmen')
 def hitmen_list(request):
     spy = request.user
     rol = get_role(spy)

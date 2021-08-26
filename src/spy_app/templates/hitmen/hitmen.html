@@ -9,8 +9,8 @@
         <br>
         <h3>Hitmen List</h3>
         <ul>
-            {% for hit in hitmen %}
-                <li> <a href="{% url 'spy_app:hit_detail' hit.pk %}"> {{hit.id}} - {{hit.target_name}}  status: {{hit.status}} </a></li>
+            {% for hitman in hitmen %}
+                <li> <a href="{% url 'spy_app:hit_detail' hitman.pk %}"> {{hitman.id}} - {{hitman.email}}  status: {{hitman.is_active}}  username: {{hitman.username}} </a></li>
             {% endfor %}
         </ul>
     {% else %}

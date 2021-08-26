@@ -42,3 +42,6 @@ class Spy(AbstractUser):
 
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'email'
+
+    class Meta:
+        permissions =(('can_see_hitmen',"Is able to see the hitman's list",),)
