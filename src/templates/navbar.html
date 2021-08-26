@@ -9,6 +9,11 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'spy_app:hits' %}">Hits</a>
         </li>
+        {% if  request.user.is_superuser or request.user.is_staff%}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'spy_app:hit_create' %}">Create Hit</a>
+          </li>
+        {% endif %}
       </ul>
       {% if request.user.is_authenticated %}
         <a href="{% url 'auth:logout' %}"><button class="btn btn-outline-success" type="submit">Logout</button></a>
