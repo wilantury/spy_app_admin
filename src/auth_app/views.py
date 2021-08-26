@@ -4,6 +4,10 @@ from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.db.utils import IntegrityError
 # Forms
 from .forms import LoginForm, SignupForm
+# utils
+from .utils import set_permissions
+# consts
+from spy_app.constants import MANAGER, BOSS
 
 Spy = get_user_model()
 
@@ -60,9 +64,9 @@ def login_view(request):
             if spy is not None:
                 login(request, spy)
                 if spy.is_staff and spy.is_superuser: # Boss
-                    print("Superuser")
+                    set_permissions(spy, BOSS)
                 elif spy.is_staff and not spy.is_superuser: # manager
-                    print("Manager")
+                    set_permissions(spy, BOSS)
                 elif not spy.is_staff and not spy.is_superuser: # hitman
                     print("Hitman")
                 if request.GET.get('next'):

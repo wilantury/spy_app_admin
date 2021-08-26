@@ -12,6 +12,7 @@ from .forms import ReassignHitForm, HitForm
 Spy = get_user_model()
 
 @login_required
+@permission_required('spy_app.can_create_hit')
 def hit_create(request):
     spy = request.user
     rol = None
