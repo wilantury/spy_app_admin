@@ -23,8 +23,8 @@ def get_hitmans(spy, rol, inactive=False):
                     query_members = Spy.objects.filter(id__in=members).filter(is_active=True)
                 else:
                     query_members = Spy.objects.filter(id__in=members)
-                return query_members if members else None
-            return None
+                return query_members if members else Spy.objects.none()
+            return Spy.objects.none()
         elif rol == BOSS:
             if not inactive:
                 return Spy.objects.filter(is_superuser=False).filter(is_active=True)
