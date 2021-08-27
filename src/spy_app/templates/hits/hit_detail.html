@@ -29,7 +29,7 @@
             <li><strong>Description:</strong> {{hit.description}}</li>
 
             <li><strong>Hitman assigned:</strong> {{hit.hitman_assigned}}
-                {% if spy_rol is not "HITMAN" and hit.status.name == "On progress"%}
+                {% if spy_rol != "HITMAN" and hit.status.name == "On progress"%}
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reassignHitmanModal">
                             Re-assign Hit
                         </button>
