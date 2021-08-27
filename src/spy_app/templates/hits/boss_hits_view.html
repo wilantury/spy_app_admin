@@ -36,6 +36,13 @@
                 <li>Not Team assigned you yet</li>        
             {% endif %}
         {% endfor %}
+        <br>
+        <h3>Total Hits</h3>
+        <ul>
+            {% for hit in total_hits %}
+                <li><a href="{% url 'spy_app:hit_detail' hit.pk %}">target: {{hit.target_name}}, status: {{hit.status}}, Hitman: {{hit.hitman_assigned}}</a></li>
+            {% endfor %}
+        </ul>
     {% else %}
         <br>
         <h5>Not Hits have been assigned you yet</h5>

@@ -84,7 +84,9 @@ def get_context(spy, rol="HITMAN"):
                             }
                     }
                 )
+            
             context['hits'] = list_company_hits
+            context['total_hits'] = Hit.objects.all()
             return context
         else:
             hits_total = Hit.objects.all()
