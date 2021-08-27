@@ -24,7 +24,7 @@
         {% endif %}
       </ul>
       {% if request.user.is_authenticated %}
-        <h5>request.user.email</h5>
+        <h5>{{request.user.email}}</h5>
         <a href="{% url 'auth:logout' %}"><button class="btn btn-outline-success" type="submit">Logout</button></a>
       {% else %}
         <a href="{% url 'auth:login' %}"><button class="btn btn-outline-success" type="submit">Login</button></a>
