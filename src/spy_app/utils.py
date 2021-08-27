@@ -66,6 +66,7 @@ def get_context(spy, rol="HITMAN"):
         if managers:
             list_company_hits = []
             list_hits=[]
+            members_hits = None
             for manager in managers:
                 manager_hits = Hit.objects.filter(hitman_assigned=manager.id)
                 team = TeamManager.objects.filter(manager=manager.id).first()
