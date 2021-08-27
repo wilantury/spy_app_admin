@@ -49,7 +49,8 @@ def get_context(spy, rol="HITMAN"):
     context = {
         'hits':hitmans_hits,
         'team':None,
-        'members_team':None
+        'members_team':None,
+        'spy_rol':HITMAN
     }
     if rol == HITMAN:
         return context
@@ -60,6 +61,7 @@ def get_context(spy, rol="HITMAN"):
             team_members = TeamMembers.objects.filter(team=team.id)
             list_hits = _get_members_hits(team_members)
             context['members_team'] = list_hits
+            context['spy_rol'] = MANAGER
         return context
     else:
         managers = Spy.objects.filter(is_staff=True).filter(is_superuser=False)
@@ -86,6 +88,7 @@ def get_context(spy, rol="HITMAN"):
                 )
             
             context['hits'] = list_company_hits
+            context['spy_rol'] = BOSS
             context['total_hits'] = Hit.objects.all()
             return context
         else:
