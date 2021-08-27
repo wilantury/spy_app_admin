@@ -92,6 +92,9 @@ def hitman_detail(request, pk):
                 new_member.save()
                 context['msn_type'] = "success"
                 context['msn'] = "Member added successfully"
+            else:
+                context['msn_type'] = "danger"
+                context['msn'] = "Manager has not been assigned to a team"
         
         if delete_members_form.is_valid():
             data_form = delete_members_form.cleaned_data
