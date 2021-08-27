@@ -85,12 +85,13 @@ def hitman_detail(request, pk):
             next
         
         if members_form.is_valid():
-            data_form = members_form.cleaned_data
-            member_team = data_form.get('hitman')
-            new_member = TeamMembers(hitman=member_team, team=team)
-            new_member.save()
-            context['msn_type'] = "success"
-            context['msn'] = "Member added successfully"
+            if team:
+                data_form = members_form.cleaned_data
+                member_team = data_form.get('hitman')
+                new_member = TeamMembers(hitman=member_team, team=team)
+                new_member.save()
+                context['msn_type'] = "success"
+                context['msn'] = "Member added successfully"
         
         if delete_members_form.is_valid():
             data_form = delete_members_form.cleaned_data
