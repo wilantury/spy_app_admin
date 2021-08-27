@@ -23,14 +23,29 @@
                 {% endif %} 
             </li>
             <li>Description: {{hitman.description}}</li>
-            {% if members %}
+            {% if hitman.is_staff %}
+                {% include 'includes/add_member_modal.html' %}
+                {% include 'includes/delete_member_modal.html' %}
                 <li>Members
-                    <ul>
-                        {% for member in members %}
-                            <li>{{member.email}}</li>
-                        {% endfor %}
-                    </ul>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHitmanModal">
+                        Add member
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteHitmanModal">
+                        delete member
+                    </button>
+                    {% if members %}
+                            <ul>
+                                {% for member in members %}
+                                    <li>{{member.email}}</li>
+                                {% endfor %}
+                            </ul>
+                    {% endif %}
                 </li>
+                {% if msn %}
+                    <div class="alert alert-{{msn_type}}" role="alert">
+                        {{msn}}
+                    </div>
+                {% endif %}
             {% endif %}
         </ul>
 {% endblock content %}

@@ -7,9 +7,31 @@ from .constants import FAILED, HITMAN, MANAGER, BOSS, COMPLETED
 # Models
 from .models import Hit, HitStatus, TeamManager, TeamMembers
 # Forms
-from .forms import ReassignHitForm, HitForm
+from .forms import ReassignHitForm, HitForm, TeamForm, TeamMembersForm, DeleteMembersForm
 
 Spy = get_user_model()
+
+@login_required
+def create_team(request):
+    team_form = TeamForm(request.POST or None)
+    context = {
+        'team_form':team_form,
+        'msn':None,
+        'msn_type': "danger"
+    }
+
+    if request.method == 'POST':
+        if team_form.is_valid():
+            data_form = team_form.cleaned_data
+            manager_team = data_form.get('team_manager')
+            team = TeamManager(manager=manager_team)
+            team.save()
+            context['msn_type'] = "success"
+            context['msn'] = "Team created successfully"
+
+    return render(request, 'team/create_team.html', context)
+
+
 
 @login_required
 @permission_required('auth_app.can_see_hitmen')
@@ -17,10 +39,18 @@ def hitman_detail(request, pk):
     spy = request.user
     context = {
         'hitman':None,
-        'members': None
+        'members': None,
+        'members_form':None,
+        'msn':None,
+        'msn_type': "danger"
     }
     rol = get_role(spy)
 
+    members_form = TeamMembersForm(request.POST or None)
+    delete_members_form = DeleteMembersForm(request.POST or None)
+    context['members_form'] = members_form
+    context['delete_members_form'] = delete_members_form
+    team = None
     hitman = Spy.objects.filter(pk=pk).first()
     if hitman:
         if rol==MANAGER:
@@ -33,13 +63,15 @@ def hitman_detail(request, pk):
         elif rol==BOSS:
             if get_role(hitman) == MANAGER:
                 members = get_hitmans(hitman,MANAGER, inactive=True)
+                team = TeamManager.objects.filter(manager=hitman.id).first()
+                list_hitmen = members.values_list("id")
+                available_hitmen = Spy.objects.filter(is_staff=False).filter(is_superuser=False).exclude(id__in=list_hitmen)
+                members_form.fields['hitman'].queryset = available_hitmen
+                delete_members_form.fields['hitman_member'].queryset = members
                 context['hitman'] = hitman
                 context['members'] = members
             else:
                 context['hitman'] = hitman
-
-
-    
 
     if request.method == 'POST':
         try:
@@ -47,8 +79,27 @@ def hitman_detail(request, pk):
             if data == '1':
                 hitman.is_active = False
                 hitman.save()
+                context['msn_type'] = "success"
+                context['msn'] = "Hitman status updated"
         except:
             next
+        
+        if members_form.is_valid():
+            data_form = members_form.cleaned_data
+            member_team = data_form.get('hitman')
+            new_member = TeamMembers(hitman=member_team, team=team)
+            new_member.save()
+            context['msn_type'] = "success"
+            context['msn'] = "Member added successfully"
+        
+        if delete_members_form.is_valid():
+            data_form = delete_members_form.cleaned_data
+            member_team = data_form.get('hitman_member')
+            hitman = TeamMembers.objects.filter(hitman=member_team.id)
+            hitman.delete()
+            context['msn_type'] = "success"
+            context['msn'] = "Member deleted successfully"
+        
 
     return render(request, 'hitmen/hitman_detail.html', context)
 
@@ -75,9 +126,15 @@ def hit_create(request):
     spy = request.user
     rol = None
     hit_form = HitForm(request.POST or None)
+    
+    context = {
+        'hit_form':hit_form,
+        'msn':None,
+        'msn_type': "danger"
+    }
 
     if request.method == "POST":
-         if hit_form.is_valid():
+        if hit_form.is_valid():
             data_form = hit_form.cleaned_data
             target_name = data_form.get('target_name')
             target_location = data_form.get('target_location')
@@ -89,6 +146,11 @@ def hit_create(request):
                     description=description, hitman_assigned=hitman_assigned,
                     status=status, assigment_creator=assigment_creator)
             hit.save()
+            context['msn_type'] = "success"
+            context['msn'] = "Hit created successfully"
+        else:
+            context['msn_type'] = "danger"
+            context['msn'] = "Somthing went wrong, check the fields inputs."
 
     if spy.is_superuser:
         rol = BOSS
@@ -96,9 +158,6 @@ def hit_create(request):
     elif spy.is_staff:
         rol = MANAGER
         hit_form.fields['hitman_assigned'].queryset = get_hitmans(spy, rol)
-    context = {
-        'hit_form':hit_form
-    }
 
     return render(request, 'hits/create_hit.html', context)
 

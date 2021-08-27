@@ -19,9 +19,14 @@ class HitForm(forms.Form):
     description = forms.CharField(widget=Textarea())
     hitman_assigned = forms.ModelChoiceField(queryset=Spy.objects.filter(is_superuser=False))
 
+class TeamForm(forms.Form):
+    team_manager = forms.ModelChoiceField(queryset=Spy.objects.filter(is_superuser=False).filter(is_staff=True).filter(is_active=True))
 
+class TeamMembersForm(forms.Form):
+    hitman = forms.ModelChoiceField(queryset=Spy.objects.filter(is_superuser=False).filter(is_staff=False))
 
-
+class DeleteMembersForm(forms.Form):
+    hitman_member = forms.ModelChoiceField(queryset=Spy.objects.filter(is_superuser=False).filter(is_staff=False))
     
 
     

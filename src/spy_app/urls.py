@@ -1,6 +1,6 @@
 from django.urls import path
 # Views
-from .views import hits_view, hit_detail, hit_create, hitmen_list, hitman_detail
+from .views import hits_view, hit_detail, hit_create, hitmen_list, hitman_detail, create_team
 
 app_name = 'spy_app'
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path('hitmen/<pk>', hitman_detail, name='hitman_detail'),
     path('hits/create', hit_create, name='hit_create'),
     path('hits/<pk>', hit_detail, name='hit_detail'),
+    path('teams/create', create_team, name='create_team'),
 ]

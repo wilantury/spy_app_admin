@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Create Team
+{% endblock title %}
+
+{% block content %}
+        <br>
+        <h3>Create Team</h3>
+        <br>
+        <div class="col-6">
+            <form method="POST">
+                {% csrf_token %}
+                {{team_form|crispy}}
+                <button type="submit" class="btn btn-primary">Create team</button>
+            </form>
+            {% if msn %}
+                <div class="alert alert-{{msn_type}}" role="alert">
+                    {{msn}}
+                </div>
+            {% endif %}
+        </div>
+{% endblock content %}
+
